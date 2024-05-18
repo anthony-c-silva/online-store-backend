@@ -1,8 +1,12 @@
 const express = require('express');
 const sqlite3 = require('sqlite3');
+const bodyParser = require('body-parser');
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+// Middleware para parsear JSON
+app.use(bodyParser.json());
 
 // Inicializa o banco de dados SQLite
 const db = new sqlite3.Database('online-store.db');
@@ -21,14 +25,13 @@ db.serialize(() => {
       INSERT INTO products (name, price, description) VALUES (?, ?, ?)
     `);
   
-    insertProducts.run('Camiseta', 29.99, 'Camiseta de algodão');
-    insertProducts.run('Calça Jeans', 59.99, 'Calça jeans azul');
-    insertProducts.run('Tênis', 79.99, 'Tênis esportivo');
-    insertProducts.run('Mochila', 39.99, 'Mochila escolar');
+    for (let i = 0; i < 1000; i++) {
+      insertProducts.run(`Produto ${i}`, Math.random() * 100, `Descrição do produto ${i}`);
+    }
     
     insertProducts.finalize();
-  });
-  
+});
+
 // Rota para listar todos os produtos
 app.get('/products', (req, res) => {
   db.all('SELECT * FROM products', (err, rows) => {
@@ -38,6 +41,19 @@ app.get('/products', (req, res) => {
       return;
     }
     res.json(rows);
+  });
+});
+
+// Rota para adicionar um produto
+app.post('/products', (req, res) => {
+  const { name, price, description } = req.body;
+  db.run('INSERT INTO products (name, price, description) VALUES (?, ?, ?)', [name, price, description], function(err) {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Erro interno do servidor');
+      return;
+    }
+    res.status(201).json({ id: this.lastID });
   });
 });
 
