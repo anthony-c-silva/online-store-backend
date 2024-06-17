@@ -60,7 +60,13 @@
    - **Max**: O tempo de resposta máximo.
    - **Std. Dev.**: O desvio padrão dos tempos de resposta.
 
-### Interpretar os Resultados:
+### Exemplos de Resultados:
 
-- **Tempo de Resposta**: O campo **Average** no Summary Report mostra o tempo de resposta médio das requisições. Este é o tempo de resposta que você está verificando.
-- **Taxa de Transferência**: O campo **Throughput** no Summary Report mostra a taxa de transferência em requisições por segundo. Este é o valor que indica quantas requisições estão sendo processadas por segundo.
+- **Average**: 2000 ms (2 segundos)
+- **Throughput**: 50 requests/sec
+
+## Considerações Finais
+
+### Analisar os Resultados:
+
+- Compare os resultados obtidos com os critérios de aceitação definidos anteriormente (ex., tempo de resposta médio < 2 segundos, throughput > 1000 requisições por minuto).
