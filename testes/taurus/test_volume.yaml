@@ -1,0 +1,26 @@
+execution:
+  - concurrency: 100
+    hold-for: 10m
+    ramp-up: 1m
+    scenario: add-products
+
+scenarios:
+  add-products:
+    default-address: http://localhost:3000
+    requests:
+      - url: /products
+        method: POST
+        headers:
+          Content-Type: application/json
+        body: |
+          {
+            "name": "Produto ${__Random(1, 10000)}",
+            "price": ${__Random(1, 100)}.99,
+            "description": "Descrição do produto ${__Random(1, 10000)}"
+          }
+reporting:
+  - module: final-stats
+  - module: console
+  - module: junit-xml
+    filename: report.xml
+    
